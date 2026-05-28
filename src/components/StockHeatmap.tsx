@@ -107,22 +107,22 @@ function buildOption(stocks: Stock[]): echarts.EChartsCoreOption {
             const changeStr = `${sign}${d.change.toFixed(2)}%`
             const name = p.name
 
-            // 크기 → 스타일 클래스 결정
+            // 크기 → 스타일 클래스 결정 (비율 ~1/8 타깃)
             let s: string, fs: number
-            if      (minDim >= 500) { s = 's38'; fs = 38 }
-            else if (minDim >= 350) { s = 's30'; fs = 30 }
-            else if (minDim >= 250) { s = 's24'; fs = 24 }
-            else if (minDim >= 180) { s = 's20'; fs = 20 }
-            else if (minDim >= 140) { s = 's16'; fs = 16 }
-            else if (minDim >= 105) { s = 's14'; fs = 14 }
-            else if (minDim >= 80)  { s = 's12'; fs = 12 }
-            else if (minDim >= 65)  { s = 's11'; fs = 11 }
-            else if (minDim >= 45)  { s = 's10'; fs = 10 }
-            else if (minDim >= 28)  { s = 's9';  fs = 9  }
+            if      (minDim >= 380) { s = 's38'; fs = 38 }
+            else if (minDim >= 270) { s = 's30'; fs = 30 }
+            else if (minDim >= 190) { s = 's24'; fs = 24 }
+            else if (minDim >= 140) { s = 's20'; fs = 20 }
+            else if (minDim >= 105) { s = 's16'; fs = 16 }
+            else if (minDim >= 78)  { s = 's14'; fs = 14 }
+            else if (minDim >= 60)  { s = 's12'; fs = 12 }
+            else if (minDim >= 46)  { s = 's11'; fs = 11 }
+            else if (minDim >= 33)  { s = 's10'; fs = 10 }
+            else if (minDim >= 22)  { s = 's9';  fs = 9  }
             else return ''  // 너무 작으면 텍스트 없음
 
             // 작은 박스: 등락률만 (이름이 길어서 넘침)
-            if (minDim < 65) return `{${s}|${changeStr}}`
+            if (minDim < 46) return `{${s}|${changeStr}}`
 
             // 두 줄이 들어갈 높이인지 확인
             const twoLineH = fs * 1.5 * 2 + 4
