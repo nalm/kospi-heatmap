@@ -76,17 +76,58 @@ function buildOption(stocks: Stock[]): echarts.EChartsCoreOption {
         visibleMin: 30,
         label: {
           show: true,
-          color: '#ffffff',
-          fontSize: 12,
-          fontWeight: 'bold',
-          lineHeight: 18,
-          formatter: (params: echarts.DefaultLabelFormatterCallbackParams) => {
-            const d = params.data as { change?: number }
-            if (typeof d?.change !== 'number') return params.name
-            const sign = d.change >= 0 ? '+' : ''
-            return `${params.name}\n${sign}${d.change.toFixed(2)}%`
-          },
           overflow: 'truncate',
+          rich: {
+            s8:  { fontSize: 8,  color: '#fff', fontWeight: 'bold', lineHeight: 12 },
+            s9:  { fontSize: 9,  color: '#fff', fontWeight: 'bold', lineHeight: 13 },
+            s10: { fontSize: 10, color: '#fff', fontWeight: 'bold', lineHeight: 15 },
+            s11: { fontSize: 11, color: '#fff', fontWeight: 'bold', lineHeight: 16 },
+            s12: { fontSize: 12, color: '#fff', fontWeight: 'bold', lineHeight: 17 },
+            s14: { fontSize: 14, color: '#fff', fontWeight: 'bold', lineHeight: 20 },
+            s16: { fontSize: 16, color: '#fff', fontWeight: 'bold', lineHeight: 23 },
+            s20: { fontSize: 20, color: '#fff', fontWeight: 'bold', lineHeight: 28 },
+          },
+          formatter: (params: echarts.DefaultLabelFormatterCallbackParams) => {
+            const p = params as unknown as {
+              rect?: { width: number; height: number }
+              data?: { change?: number }
+              name: string
+            }
+            const w = p.rect?.width  ?? 80
+            const h = p.rect?.height ?? 80
+            const minDim = Math.min(w, h)
+
+            const d = p.data
+            if (typeof d?.change !== 'number') return ''
+
+            const sign = d.change >= 0 ? '+' : ''
+            const changeStr = `${sign}${d.change.toFixed(2)}%`
+            const name = p.name
+
+            // 크기 → 스타일 클래스 결정
+            let s: string, fs: number
+            if      (minDim >= 280) { s = 's20'; fs = 20 }
+            else if (minDim >= 200) { s = 's16'; fs = 16 }
+            else if (minDim >= 150) { s = 's14'; fs = 14 }
+            else if (minDim >= 110) { s = 's12'; fs = 12 }
+            else if (minDim >= 85)  { s = 's11'; fs = 11 }
+            else if (minDim >= 65)  { s = 's10'; fs = 10 }
+            else if (minDim >= 45)  { s = 's9';  fs = 9  }
+            else if (minDim >= 28)  { s = 's8';  fs = 8  }
+            else return ''  // 너무 작으면 텍스트 없음
+
+            // 작은 박스: 등락률만 (이름이 길어서 넘침)
+            if (minDim < 65) return `{${s}|${changeStr}}`
+
+            // 두 줄이 들어갈 높이인지 확인
+            const twoLineH = fs * 1.5 * 2 + 4
+            if (h >= twoLineH) {
+              return `{${s}|${name}}\n{${s}|${changeStr}}`
+            }
+
+            // 높이 부족: 한 줄만 (종목명)
+            return `{${s}|${name}}`
+          },
         },
         itemStyle: {
           borderColor: '#111111',
