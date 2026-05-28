@@ -86,6 +86,9 @@ function buildOption(stocks: Stock[]): echarts.EChartsCoreOption {
             s14: { fontSize: 14, color: '#fff', fontWeight: 'bold', lineHeight: 20 },
             s16: { fontSize: 16, color: '#fff', fontWeight: 'bold', lineHeight: 23 },
             s20: { fontSize: 20, color: '#fff', fontWeight: 'bold', lineHeight: 28 },
+            s24: { fontSize: 24, color: '#fff', fontWeight: 'bold', lineHeight: 34 },
+            s30: { fontSize: 30, color: '#fff', fontWeight: 'bold', lineHeight: 42 },
+            s38: { fontSize: 38, color: '#fff', fontWeight: 'bold', lineHeight: 52 },
           },
           formatter: (params: echarts.DefaultLabelFormatterCallbackParams) => {
             const p = params as unknown as {
@@ -106,14 +109,16 @@ function buildOption(stocks: Stock[]): echarts.EChartsCoreOption {
 
             // 크기 → 스타일 클래스 결정
             let s: string, fs: number
-            if      (minDim >= 280) { s = 's20'; fs = 20 }
-            else if (minDim >= 200) { s = 's16'; fs = 16 }
-            else if (minDim >= 150) { s = 's14'; fs = 14 }
-            else if (minDim >= 110) { s = 's12'; fs = 12 }
-            else if (minDim >= 85)  { s = 's11'; fs = 11 }
-            else if (minDim >= 65)  { s = 's10'; fs = 10 }
-            else if (minDim >= 45)  { s = 's9';  fs = 9  }
-            else if (minDim >= 28)  { s = 's8';  fs = 8  }
+            if      (minDim >= 500) { s = 's38'; fs = 38 }
+            else if (minDim >= 350) { s = 's30'; fs = 30 }
+            else if (minDim >= 250) { s = 's24'; fs = 24 }
+            else if (minDim >= 180) { s = 's20'; fs = 20 }
+            else if (minDim >= 140) { s = 's16'; fs = 16 }
+            else if (minDim >= 105) { s = 's14'; fs = 14 }
+            else if (minDim >= 80)  { s = 's12'; fs = 12 }
+            else if (minDim >= 65)  { s = 's11'; fs = 11 }
+            else if (minDim >= 45)  { s = 's10'; fs = 10 }
+            else if (minDim >= 28)  { s = 's9';  fs = 9  }
             else return ''  // 너무 작으면 텍스트 없음
 
             // 작은 박스: 등락률만 (이름이 길어서 넘침)
